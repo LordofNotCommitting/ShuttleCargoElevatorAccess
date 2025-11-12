@@ -1,0 +1,10 @@
+﻿################################################################################
+# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ShuttleCargoElevatorAccess/v17
+/package/ShuttleCargoElevatorAccess
+/ShuttleCargoElevatorAccess.zip
+/modmanifest.json
+/.gitignore
+/.gitignore

@@ -1,26 +1,37 @@
 ﻿using HarmonyLib;
 using MGSC;
 using System;
+using UnityEngine;
 
 namespace ShuttleCargoElevatorAccess
 {
-    [HarmonyPatch(typeof(ElevatorWindow), nameof(ElevatorWindow.CloseButtonOnClick))]
-    public class OverrideCloseButton
+    [HarmonyPatch(typeof(ElevatorWindow), nameof(ElevatorWindow.Configure))]
+    public class AddStorageButtonPatch
     {
-        /*
-        static void Postfix(ref ElevatorWindow __result)
-        {
+        public static CommonButton storageButton;
 
-            __result._missionExitButton.OnClick += ShuttleCargoButtonClick;
-            
+        static void Prefix(ElevatorWindow __instance)
+        {
+            if (storageButton == null)
+            {
+                storageButton = UnityEngine.Object.Instantiate(__instance._missionExitButton, __instance._missionExitButton.transform.parent.transform);
+                storageButton.OnClick += ShuttleCargoButtonClick;
+                storageButton.name = "ShipCargoButton";
+                storageButton.gameObject.SetActive(true);
+
+                Transform captionTransform = storageButton.transform.Find("Caption");
+                if (captionTransform != null)
+                {
+                    LocalizableLabel locLabel = captionTransform.GetComponent<LocalizableLabel>();
+                    if (locLabel != null)
+                    {
+                        locLabel._label = "ui.magnum.shuttleCargo";
+                    }
+                }
+                storageButton.SetInteractable(true);
+            }
         }
-        */
         private static void ShuttleCargoButtonClick(CommonButton button, int arg2)
-        {
-            throw new NotImplementedException();
-        }
-
-        static void Postfix(ElevatorWindow __instance, CommonButton arg1, int arg2)
         {
             UI.Hide<ElevatorWindow>();
             //Shuttle shuttle_instance = UnityEngine.Object.FindObjectOfType<Shuttle>();
@@ -46,9 +57,16 @@ namespace ShuttleCargoElevatorAccess
                 v._tabsView.SelectAndShowFirstTab();
 
             }).SetBackOnBackgroundClick(true);
-
         }
-        
+
+        /*
+        static void Postfix(ref ElevatorWindow __result)
+        {
+
+            __result._missionExitButton.OnClick += ShuttleCargoButtonClick;
+            
+        }
+        */
 
 
         /*
