@@ -10,14 +10,29 @@ namespace ShuttleCargoElevatorAccess
     {
         public static CommonButton storageButton;
 
+
         static void Prefix(ElevatorWindow __instance)
         {
-            if (storageButton == null)
+            bool active = false;
+            UI.Chain<InventoryScreen>().Show(false).Invoke(delegate (InventoryScreen v)
+            {
+                ShuttleCargoDepartment department = v._magnumSpaceship.GetDepartment<ShuttleCargoDepartment>();
+                if (department != null && department.IsActiveDepartment())
+                {
+                    //Plugin.Logger.Log("???");
+                    active = true;
+                }
+            });
+
+            if (active && storageButton == null)
             {
                 storageButton = UnityEngine.Object.Instantiate(__instance._missionExitButton, __instance._missionExitButton.transform.parent.transform);
                 storageButton.OnClick += ShuttleCargoButtonClick;
                 storageButton.name = "ShipCargoButton";
-                storageButton.gameObject.SetActive(true);
+
+                //active only when upgrade exist
+                storageButton.gameObject.SetActive(active);
+
 
                 Transform captionTransform = storageButton.transform.Find("Caption");
                 if (captionTransform != null)
