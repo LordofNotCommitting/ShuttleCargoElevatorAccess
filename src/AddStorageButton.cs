@@ -10,19 +10,31 @@ namespace ShuttleCargoElevatorAccess
     {
         public static CommonButton storageButton;
 
-
         static void Prefix(ElevatorWindow __instance)
         {
             bool active = false;
-            UI.Chain<InventoryScreen>().Show(false).Invoke(delegate (InventoryScreen v)
+            if (Plugin.curr_department != null)
             {
-                ShuttleCargoDepartment department = v._magnumSpaceship.GetDepartment<ShuttleCargoDepartment>();
-                if (department != null && department.IsActiveDepartment())
+                //alternative way to get department
+                //Plugin.Logger.Log("Better way applied!");
+                if (Plugin.curr_department.IsActiveDepartment())
                 {
-                    //Plugin.Logger.Log("???");
                     active = true;
                 }
-            });
+            }
+            else {
+                //if no department, go savage
+                UI.Chain<InventoryScreen>().Show(false).Invoke(delegate (InventoryScreen v)
+                {
+                    ShuttleCargoDepartment department = v._magnumSpaceship.GetDepartment<ShuttleCargoDepartment>();
+                    if (department != null && department.IsActiveDepartment())
+                    {
+                        //Plugin.Logger.Log("???");
+                        active = true;
+                    }
+                });
+            }
+            
 
             if (active && storageButton == null)
             {
