@@ -14,6 +14,8 @@ namespace ShuttleCargoElevatorAccess
     public static class Plugin
     {
 
+        public static ShuttleCargoDepartment curr_department { get; set; }
+
         public static ConfigDirectories ConfigDirectories = new ConfigDirectories();
 
         public static ModConfig Config { get; private set; }
